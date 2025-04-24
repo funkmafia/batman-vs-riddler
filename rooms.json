@@ -1,0 +1,144 @@
+[
+    
+    {
+      "room": "Green Room",
+      "villain": "Riddler",
+      "description": "Hello there, Batman. The Riddler here, I see you've entered the Green Room; a chamber wired with traps, flickering neon puzzles, and screens watching your every move. Your wit will be tested.",
+      "choices": [
+        {
+          "text": "Keep the lights on",
+          "result": "The room glows eerily. A screen flickers — a riddle appears!",
+          "riddles": [
+            {
+              "question": "I'm not alive, but I can grow; I don't have lungs, but I need air. What am I?",
+              "answer": "fire"
+            }
+          ]
+        },
+        {
+          "text": "Walk in blindly",
+          "result": "You stumble in darkness... and suddenly, a voice echoes with a riddle!",
+          "riddles": [
+            {
+              "question": "What has to be broken before you can use it?",
+              "answer": "egg"
+            }
+          ]
+        }
+      ]
+    },
+
+    {
+        "room":"The Icebox Lab", 
+        "villain": "Mr.Freeze", 
+        "description":"Ah Batman... welcome to the Icebox Lab. Cold fog clings to the floor, and icicles hang from rusted pipes. Every sound echoes in the frozen silence.",
+        "choices": [
+          {
+            "text": "Open the freezer",
+            "result": "Frost billows out. Inside... a riddle carved in ice!",
+            "riddles": [
+              {
+                "question": "The more you take, the more you leave behind. What am I", 
+                "answer": "Footsteps"
+              }
+            ]
+          },
+          {
+            "text": "Water the frozen plant",
+            "result": "The ice cracks. A whisper from within challenges you with a riddle.",
+            "riddles": [
+              {
+                "question": "I have no voice but can be heard. I can crack but never bleed. What am I?", 
+                "answer": "Ice"
+              }
+            ]
+          }
+        ]
+    },
+
+
+    {
+        "room": "The Loughing Lounge", 
+        "villain": "Joker", 
+        "description": "Welcome to the Laughing Lounge, Bats. A circus mirror room of madness. Graffiti, balloon animals, and laughing gas hang in the air. The lights flicker... and so does your sanity.",
+        "choices": [
+          {
+            "text": "Shuffle the deck of cards",
+            "result": "The cards scatter. A Joker card flips... a riddle is printed beneath.",
+            "riddles": [
+              {
+                "question": "I can be cracked, made, told, and played. What am I?", 
+                "answer": "joke"
+              }
+            ]
+          },
+          {
+            "text": "Open the jack-in-the-box",
+            "result": "POP! Laughter fills the room... then silence. A riddle hangs in the air.",
+            "riddles": [
+              {
+                "question": "What has keys but can't open locks?", 
+                "answer": "piano"
+              }
+            ]
+          }
+        ]
+    },
+
+    {
+        "room": "The Velvet Vault",
+        "villain": "Catwoman", 
+        "description": "Curiosity got the bat? ... Red velvet curtains. Jewelry cases. Laser traps flicker like claws in the dark. You've stepped into the thief's lair, where elegance masks danger.",
+        "choices": [
+          {
+            "text": "Take the tag from the cat statue",
+            "result": "The statue purrs. A green laser highlights... a riddle engraved below.",
+            "riddles": [
+              {
+                "question": "I go up but never come down. What am I?",
+                "answer": "age"
+              }
+            ]
+          },
+          {
+            "text": "Try to unlock the red safe",
+            "result": "Click. Click. A hiss. A note slides out with a riddle scrawled on it.",
+            "riddles": [
+              {
+                "question": "What gets wetter the more it dries?",
+                "answer": "towel"
+              }
+            ]
+          }
+        ]
+    }, 
+
+    {
+        "room": "The Toxic Garden",
+        "villain": "Poison Ivy",
+        "description": "Nature welcomes you, Batman. But beware; vines twist through broken walls. Glowing flowers pulsate gently in the toxic air. Step carefully, the plants are alive, and they're watching.", 
+        "choices": [
+          {
+            "text": "Pluck the glowing flower",
+            "result": "The flower pulses, then wilts. A voice from the vines whispers a riddle.",
+            "riddles": [
+              {
+                "question": "What has hands but can't clap?",
+                "answer": "clock"
+              }
+            ]
+          },
+          {
+            "text": "Follow the buzzing bee",
+            "result": "The bee stops at a blossom. A riddle is sung by the petals.",
+            "riddles": [
+              {
+                "question": "What kind of room has no doors or windows?",
+                "answer": "mushroom"
+              }
+            ]
+          }
+        ]
+    }
+
+]
