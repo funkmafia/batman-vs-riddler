@@ -46,18 +46,9 @@ function loadGameData() {
       return response.json();
     })
     .then((data) => {
-        const finalRoom = data.find(room => room.room === "Final Chamber"); 
-        const gameRooms = data.filter(room => room.room !== "Final Chamber");
-
-        // shuffle only playable rooms 
-        rooms = shuffleArray(gameRooms); 
-
-        // append the end room at the end 
-        if(finalRoom) {
-            rooms.push(finalRoom); 
-        }
+        rooms = shuffleArray(data);
         if (rooms.length === 0) {
-            throw new Error('No rooms found in game data'); 
+            throw new Error('No rooms found in game data');
         }
     })
     .catch((error) => {
@@ -97,19 +88,9 @@ function loadRoom(index) {
     roomData.choices
   );
 
-  // Special logic for Final Chamber
-  if (room.room === "Final Chamber") {
-    if (batTokens > 0) {
-      riddleText.textContent = "🎉 Victory! You caught the Riddler. Gotham is safe... for now.";
-    } else {
-      riddleText.textContent = "☠️ The Riddler escapes. Gotham falls into chaos.";
-    }
-    restartGameBtn.style.display = "block";
-    return;
-  }
-
   riddleSection.classList.add("hidden");
   riddleBox.style.display = "none";
+  // Moved for clarity: clear riddleText after hiding section
   riddleText.textContent = "";
   riddleInput.value = "";
   riddleInput.style.display = "none";
@@ -177,10 +158,23 @@ timerInterval = setInterval(() => {
     timerDisplay.textContent = `${timeLeft} seconds`; 
 
     if (timeLeft <= 0) {
-        clearInterval(timerInterval); 
-        feedback.textContent = "Time's up ! The Riddler escapes ... "; 
-        feedback.style.color = "red"; 
-        endGame(false);
+        clearInterval(timerInterval);
+        batTokens--;
+        updateBatTokens();
+
+        if (batTokens <= 0) {
+            feedback.textContent = "Time’s up! The Riddler escapes ... Gotham is doomed.";
+            feedback.style.color = "red";
+            setTimeout(() => {
+                endGame(false);
+            }, 1000);
+        } else {
+            feedback.textContent = "Time’s up! You’ve lost a BatToken!";
+            feedback.style.color = "orange";
+            setTimeout(() => {
+                loadRoom(currentRoomIndex);
+            }, 2000);
+        }
     }
 }, 1000); 
 }
@@ -242,6 +236,7 @@ function showHowToPlay() {
 // === END GAME AND RESTART === 
 
 function endGame(win) {
+    console.log("Game ended. Win status:", win, "Remaining BatTokens:", batTokens);
     clearInterval(timerInterval);
     gameScreen.style.display="none"; 
     endScreen.classList.remove("hidden"); 
@@ -264,7 +259,6 @@ function endGame(win) {
           : "The Riddler has escaped. Gotham is DOOMED!";
     });
 }
-
 
 function restartGame() {
   currentRoomIndex = 0;
@@ -299,3 +293,4 @@ class Room {
     this.choices = choices;
   }
 }
+

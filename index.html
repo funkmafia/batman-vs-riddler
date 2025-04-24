@@ -35,7 +35,6 @@
         </div>
 
         <section id="gameScreen" class="hidden relative z-10 w-full max-w-4xl mx-auto px-4 py-8">
-            <!-- Game HUD -->
             <div class="flex justify-between items-center mb-8">
                 <div class="flex items-center space-x-2">
                     <h3 class="text-white text-sm font-semibold">BatTokens</h3>
@@ -80,7 +79,7 @@
                 <!-- Choices -->
                 <div id="textChoice"
                     class="flex flex-col sm:flex-row justify-center gap-4 text-sm text-gray-300 hidden">
-                    <!-- Choice buttons will be injected here -->
+                    
                 </div>
 
                 <!-- Riddle Section -->
@@ -105,31 +104,32 @@
                     </div>
                 </div>
             </div>
-            <!-- End Game Result -->
-            <div id="endScreen" class="hidden text-center my-10 space-y-6 transition-opacity duration-500 ease-in-out">
-                <h2 class="text-2xl font-semibold text-white">
-                    This is the last step, detective. You've come far. But the question
-                    remains ... did you win?
-                </h2>
-
-                <button type="button" id="faceOutcomeBtn"
-                    class="mt-6 px-6 py-3 bg-yellow-500 hover:bg-yellow-400 text-black font-bold rounded-md shadow transition">
-                    Face the Outcome
-                </button>
-
-                <div id="outcomeResult" class="hidden mt-6 space-y-4">
-                    <p class="text-green-400 text-lg font-medium">
-                        🧠 A final voice echoes...
-                    </p>
-                    <p class="text-white text-xl font-semibold italic"></p>
-
-                    <button type="button" id="restartGameBtn"
-                        class="bg-green-800 hover:bg-green-700 text-white font-bold px-6 py-3 rounded-md shadow-lg transition duration-200">
-                        Play Again
-                    </button>
-                </div>
-            </div>
         </section>
+
+        
+        <div id="endScreen" class="hidden text-center my-10 space-y-6 transition-opacity duration-500 ease-in-out">
+          <h2 class="text-2xl font-semibold text-white">
+            This is the last step, detective. You've come far. But the question
+            remains ... did you win?
+          </h2>
+
+          <button type="button" id="faceOutcomeBtn"
+            class="mt-6 px-6 py-3 bg-yellow-500 hover:bg-yellow-400 text-black font-bold rounded-md shadow transition">
+            Face the Outcome
+          </button>
+
+          <div id="outcomeResult" class="hidden mt-6 space-y-4">
+            <p class="text-green-400 text-lg font-medium">
+              🧠 A final voice echoes...
+            </p>
+            <p class="text-white text-xl font-semibold italic"></p>
+
+            <button type="button" id="restartGameBtn"
+              class="bg-green-800 hover:bg-green-700 text-white font-bold px-6 py-3 rounded-md shadow-lg transition duration-200">
+              Play Again
+            </button>
+          </div>
+        </div>
     </main>
 
     <script src="script.js"></script>
