@@ -24,7 +24,7 @@ let currentRoomIndex = 0;
 let batTokens = 3;
 let currentRiddle = null;
 let timerInterval = null; 
-let timeLeft = 60; // 60 seconds per room 
+let timeLeft = 120; // 120 seconds per room 
 
 // === 3. EVENT LISTENERS ===
 document.addEventListener("DOMContentLoaded", () => {
@@ -61,7 +61,7 @@ function startGame() {
   // Reset game state
   currentRoomIndex = 0;
   batTokens = 3;
-  timeLeft = 60;
+  timeLeft = 120;
   updateBatTokens();
   
   // Show game screen
@@ -70,7 +70,7 @@ function startGame() {
   
   // Start first room
   loadRoom(currentRoomIndex);
-  timeLeft = 60;
+  timeLeft = 120;
   startTimer();
 } 
 
@@ -97,7 +97,7 @@ function loadRoom(index) {
   submitAnswerBtn.style.display = "none";
   feedback.textContent = "";
 
-  timeLeft = 60;
+  timeLeft = 120;
   startTimer();
 
   // Update UI
@@ -231,7 +231,7 @@ function shuffleArray(array) {
 }
 
 function showHowToPlay() {
-    alert("You must escape 5 villainous rooms to catch the Riddler. Each room contains a deadly trap and a riddle. You have 60 seconds per room ... and only 3 BatTokens. Choose wisely, Batman. Good luck!");}
+    alert("You must escape 5 villainous rooms to catch the Riddler. Each room contains a deadly trap and a riddle. You have 120 seconds per room ... and only 3 BatTokens. Choose wisely, Batman. Good luck!");}
 
 // === END GAME AND RESTART === 
 
@@ -263,7 +263,7 @@ function endGame(win) {
 function restartGame() {
   currentRoomIndex = 0;
   batTokens = 3;
-  timeLeft = 60;
+  timeLeft = 120;
   updateBatTokens();
 
   endScreen.classList.add("hidden");
