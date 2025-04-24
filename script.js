@@ -1,4 +1,5 @@
 // === 1. DOM ELEMENTS ===
+// These are all the elements we interact with in the HTML — buttons, input fields, display containers, etc.
 const start = document.getElementById("startGameBtn");
 const guide = document.getElementById("howToPlayBtn");
 const intro = document.getElementById("intro");
@@ -19,6 +20,7 @@ const outcomeText = outcomeResult.querySelector("p.text-white");
 const faceOutcomeBtn = document.getElementById("faceOutcomeBtn");
 
 // === 2. STATE VARIABLES ===
+// These track the current game state: rooms, which room you're on, lives (batTokens), the current riddle, and the countdown timer.
 let rooms = [];
 let currentRoomIndex = 0;
 let batTokens = 3;
@@ -27,16 +29,26 @@ let timerInterval = null;
 let timeLeft = 120; // 120 seconds per room 
 
 // === 3. EVENT LISTENERS ===
+// These trigger the main game functions when the page loads or when the player clicks buttons.
 document.addEventListener("DOMContentLoaded", () => {
   start.addEventListener("click", startGame);
   guide.addEventListener("click", showHowToPlay);
   submitAnswerBtn.addEventListener("click", handleAnswerSubmit);
   document.getElementById("restartGameBtn").addEventListener("click", restartGame);
   // Load game data
+
+  const muteBtn = document.getElementById("muteBtn");
+  muteBtn.addEventListener("click", () => {
+    bgMusic.muted = !bgMusic.muted;
+    muteBtn.textContent = bgMusic.muted ? "Unmute" : "Mute";
+  });
+
+  
   loadGameData();
 });
 
 // === 4. MAIN FUNCTIONS ===
+// loadGameData(): Fetches and shuffles room data from rooms.json to set up the game structure.
 function loadGameData() {
   fetch("data/rooms.json")
     .then((response) => {
@@ -57,6 +69,7 @@ function loadGameData() {
     });
 }
 
+// startGame(): Initializes game state and loads the first room.
 function startGame() {
   // Reset game state
   currentRoomIndex = 0;
@@ -67,13 +80,17 @@ function startGame() {
   // Show game screen
   intro.style.display = "none";
   gameScreen.style.display = "block";
-  
+
+  // Play background music
+  bgMusic.play().catch(err => console.warn("Autoplay blocked until user interacts."));
+
   // Start first room
   loadRoom(currentRoomIndex);
   timeLeft = 120;
   startTimer();
 } 
 
+// loadRoom(index): Displays the room details and resets UI elements for the new room.
 function loadRoom(index) {
   if (index >= rooms.length) {
     endGame(true); // Player won
@@ -116,6 +133,7 @@ function loadRoom(index) {
   console.log("Room choices:", room.choices);
 }
 
+// displayChoices(choicesArray): Dynamically creates and shows buttons for the player's choices in the current room.
 function displayChoices(choicesArray){
     choices.innerHTML =""; 
     choices.style.display = "flex"; 
@@ -148,6 +166,7 @@ function displayChoices(choicesArray){
     });
 }
 
+// startTimer(): Starts a countdown for the room. If time runs out, the player loses a BatToken.
 function startTimer() {
     clearInterval(timerInterval); // clear any previous timer 
     timerDisplay.style.display = "block"
@@ -179,6 +198,7 @@ timerInterval = setInterval(() => {
 }, 1000); 
 }
 
+// handleAnswerSubmit(): Compares the player's answer to the correct answer and handles success or penalty logic.
 function handleAnswerSubmit() {
     
     const userAnswer = riddleInput.value.trim().toLowerCase(); 
@@ -210,6 +230,7 @@ function handleAnswerSubmit() {
     }
 }
 
+// updateBatTokens(): Visually updates the BatTokens displayed on the screen using icons and fade effects.
 function updateBatTokens() {
   batTokenDisplay.innerHTML = "";
 
@@ -226,15 +247,17 @@ function updateBatTokens() {
   }
 }
 
+// shuffleArray(): Randomizes the order of an array. Used to shuffle the rooms.
 function shuffleArray(array) {
   return array.sort(() => Math.random() - 0.5);
 }
 
+// showHowToPlay(): Displays a popup with the game instructions.
 function showHowToPlay() {
     alert("You must escape 5 villainous rooms to catch the Riddler. Each room contains a deadly trap and a riddle. You have 120 seconds per room ... and only 3 BatTokens. Choose wisely, Batman. Good luck!");}
 
-// === END GAME AND RESTART === 
-
+// === END GAME AND RESTART ===
+// endGame(win): Hides the game and shows the end screen based on whether the player won or lost.
 function endGame(win) {
     console.log("Game ended. Win status:", win, "Remaining BatTokens:", batTokens);
     clearInterval(timerInterval);
@@ -260,6 +283,7 @@ function endGame(win) {
     });
 }
 
+// restartGame(): Resets all game values and UI so the player can replay from the start.
 function restartGame() {
   currentRoomIndex = 0;
   batTokens = 3;
@@ -285,6 +309,7 @@ function restartGame() {
 }
 
 // === 6. CLASS DEFINITIONS ===
+// Room class: Creates a room object from data with name, villain, description, and choices.
 class Room {
   constructor(name, villain, description, choices) {
     this.name = name;
@@ -294,3 +319,8 @@ class Room {
   }
 }
 
+// audio feature 
+
+const bgMusic = document.getElementById("bgMusic");
+
+ 
