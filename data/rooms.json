@@ -139,6 +139,21 @@
             ]
           }
         ]
+    }, {
+      "room": "Final Chamber",
+      "villain": "The Riddler",
+      "description": "This is the last step, detective. You've come far. But the question remains ... did you win?",
+      "choices": [
+        {
+          "text": "Face the outcome",
+          "result": "A final voice echoes...",
+          "riddles": [
+            {
+              "question": "You've either saved Gotham or sealed its fate. Click the button to see your ending.",
+              "answer": "restart"
+            }
+          ]
+        }
+      ]
     }
-
 ]

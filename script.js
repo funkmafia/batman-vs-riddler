@@ -13,6 +13,10 @@ const feedback = document.getElementById("feedback");
 const choices = document.getElementById("textChoice");
 const timerDisplay = document.getElementById("timer");
 const batTokenDisplay = document.getElementById("batTokenDisplay");
+const endScreen = document.getElementById("endScreen");
+const outcomeResult = document.getElementById("outcomeResult");
+const outcomeText = outcomeResult.querySelector("p.text-white");
+const faceOutcomeBtn = document.getElementById("faceOutcomeBtn");
 
 // === 2. STATE VARIABLES ===
 let rooms = [];
@@ -27,14 +31,14 @@ document.addEventListener("DOMContentLoaded", () => {
   start.addEventListener("click", startGame);
   guide.addEventListener("click", showHowToPlay);
   submitAnswerBtn.addEventListener("click", handleAnswerSubmit);
-  
+  document.getElementById("restartGameBtn").addEventListener("click", restartGame);
   // Load game data
   loadGameData();
 });
 
 // === 4. MAIN FUNCTIONS ===
 function loadGameData() {
-  fetch("rooms.json")
+  fetch("data/rooms.json")
     .then((response) => {
       if (!response.ok) {
         throw new Error('Failed to load game data');
@@ -42,10 +46,19 @@ function loadGameData() {
       return response.json();
     })
     .then((data) => {
-      rooms = shuffleArray(data);
-      if (rooms.length === 0) {
-        throw new Error('No rooms found in game data');
-      }
+        const finalRoom = data.find(room => room.room === "Final Chamber"); 
+        const gameRooms = data.filter(room => room.room !== "Final Chamber");
+
+        // shuffle only playable rooms 
+        rooms = shuffleArray(gameRooms); 
+
+        // append the end room at the end 
+        if(finalRoom) {
+            rooms.push(finalRoom); 
+        }
+        if (rooms.length === 0) {
+            throw new Error('No rooms found in game data'); 
+        }
     })
     .catch((error) => {
       console.error("Error loading game data:", error);
@@ -66,6 +79,7 @@ function startGame() {
   
   // Start first room
   loadRoom(currentRoomIndex);
+  timeLeft = 60;
   startTimer();
 } 
 
@@ -82,6 +96,28 @@ function loadRoom(index) {
     roomData.description,
     roomData.choices
   );
+
+  // Special logic for Final Chamber
+  if (room.room === "Final Chamber") {
+    if (batTokens > 0) {
+      riddleText.textContent = "🎉 Victory! You caught the Riddler. Gotham is safe... for now.";
+    } else {
+      riddleText.textContent = "☠️ The Riddler escapes. Gotham falls into chaos.";
+    }
+    restartGameBtn.style.display = "block";
+    return;
+  }
+
+  riddleSection.classList.add("hidden");
+  riddleBox.style.display = "none";
+  riddleText.textContent = "";
+  riddleInput.value = "";
+  riddleInput.style.display = "none";
+  submitAnswerBtn.style.display = "none";
+  feedback.textContent = "";
+
+  timeLeft = 60;
+  startTimer();
 
   // Update UI
   roomTracker.textContent = `${room.name} - ${room.villain}`;
@@ -113,12 +149,13 @@ function displayChoices(choicesArray){
         btn.className = "flex-1 bg-black bg-opacity-50 text-white px-6 py-4 rounded-xl border border-green-700 shadow-md hover:bg-green-800 transition-all duration-200 ease-in-out text-lg font-semibold";
    
     btn.addEventListener("click", () => {
-        feedback.textContent = choice.result; 
-        feedback.style.color="yellow";
-    
+        textLog.innerHTML += `<p class="text-yellow-300 font-semibold mt-4 border-l-4 border-yellow-400 pl-3 italic">🧠 ${choice.result}</p>`;        // feedback.textContent = choice.result; 
+       // feedback.style.color="white";
+        console.log("Choice riddles:", choice.riddles);
     const riddle = choice.riddles[Math.floor(Math.random() * choice.riddles.length)];
     currentRiddle = riddle; 
 
+    riddleSection.classList.remove("hidden");
         riddleBox.style.display = "block";
         riddleText.textContent = riddle.question; 
         riddleInput.style.display = "block"; 
@@ -130,12 +167,30 @@ function displayChoices(choicesArray){
     });
 }
 
+function startTimer() {
+    clearInterval(timerInterval); // clear any previous timer 
+    timerDisplay.style.display = "block"
+    timerDisplay.textContent = `${timeLeft} seconds`;
+
+timerInterval = setInterval(() => {
+    timeLeft--; 
+    timerDisplay.textContent = `${timeLeft} seconds`; 
+
+    if (timeLeft <= 0) {
+        clearInterval(timerInterval); 
+        feedback.textContent = "Time's up ! The Riddler escapes ... "; 
+        feedback.style.color = "red"; 
+        endGame(false);
+    }
+}, 1000); 
+}
+
 function handleAnswerSubmit() {
     
     const userAnswer = riddleInput.value.trim().toLowerCase(); 
     const correctAnswer = currentRiddle.answer.trim().toLowerCase(); 
     riddleInput.value = ""; // clears previous input
-    
+
         if(userAnswer === correctAnswer) {
             feedback.textContent = "Correct, Batman! go to the next room";
             feedback.style.color = "lime"; 
@@ -147,10 +202,13 @@ function handleAnswerSubmit() {
         }, 1000);
     } else {
         batTokens--; 
+        updateBatTokens();
 
         if (batTokens <= 0) {
           feedback.textContent = "❌ The Riddler has escaped... Gotham is doomed.";
-          endGame(false);
+          setTimeout(() => {
+            endGame(false);
+          }, 1000); // short delay for dramatic effect
           return; // <- stops any further logic
         }
         feedback.textContent = `WRONG !! ...`;
@@ -158,19 +216,79 @@ function handleAnswerSubmit() {
     }
 }
 
-        
+function updateBatTokens() {
+  batTokenDisplay.innerHTML = "";
 
+  for (let i = 0; i < 3; i++) {
+    const bat = document.createElement("span");
+    bat.textContent = "🦇";
+    bat.className = "text-yellow-300 text-2xl transition-opacity duration-700 ease-in-out";
 
+    if (i >= batTokens) {
+      bat.classList.add("opacity-0");
+    }
 
-
-
-
+    batTokenDisplay.appendChild(bat);
+  }
+}
 
 function shuffleArray(array) {
   return array.sort(() => Math.random() - 0.5);
 }
 
+function showHowToPlay() {
+    alert("You must escape 5 villainous rooms to catch the Riddler. Each room contains a deadly trap and a riddle. You have 60 seconds per room ... and only 3 BatTokens. Choose wisely, Batman. Good luck!");}
 
+// === END GAME AND RESTART === 
+
+function endGame(win) {
+    clearInterval(timerInterval);
+    gameScreen.style.display="none"; 
+    endScreen.classList.remove("hidden"); 
+
+    riddleSection.classList.add("hidden");
+    riddleInput.style.display = "none";
+    submitAnswerBtn.style.display = "none";
+    
+    faceOutcomeBtn.style.display = "block";
+    outcomeResult.classList.add("hidden");
+
+    const newBtn = faceOutcomeBtn.cloneNode(true);
+    faceOutcomeBtn.parentNode.replaceChild(newBtn, faceOutcomeBtn);
+
+    newBtn.addEventListener("click", () => {
+        newBtn.style.display = "none";
+        outcomeResult.classList.remove("hidden");
+        outcomeText.textContent = batTokens > 0
+          ? "You have caught the Riddler. Gotham is safe ... for now"
+          : "The Riddler has escaped. Gotham is DOOMED!";
+    });
+}
+
+
+function restartGame() {
+  currentRoomIndex = 0;
+  batTokens = 3;
+  timeLeft = 60;
+  updateBatTokens();
+
+  endScreen.classList.add("hidden");
+  intro.style.display = "block";
+  gameScreen.style.display = "none";
+
+  textLog.innerHTML = "";
+  roomTracker.textContent = "";
+  riddleText.textContent = "";
+  feedback.textContent = "";
+  riddleInput.value = "";
+
+  riddleSection.classList.add("hidden");
+  riddleInput.style.display = "none";
+  submitAnswerBtn.style.display = "none";
+
+  faceOutcomeBtn.style.display = "none";
+  outcomeResult.classList.add("hidden");
+}
 
 // === 6. CLASS DEFINITIONS ===
 class Room {
@@ -181,4 +299,3 @@ class Room {
     this.choices = choices;
   }
 }
-  
