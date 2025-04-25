@@ -271,16 +271,20 @@ function endGame(win) {
     faceOutcomeBtn.style.display = "block";
     outcomeResult.classList.add("hidden");
 
-    const newBtn = faceOutcomeBtn.cloneNode(true);
-    faceOutcomeBtn.parentNode.replaceChild(newBtn, faceOutcomeBtn);
+    if (faceOutcomeBtn && faceOutcomeBtn.parentNode) {
+      const newBtn = faceOutcomeBtn.cloneNode(true);
+      faceOutcomeBtn.parentNode.replaceChild(newBtn, faceOutcomeBtn);
 
-    newBtn.addEventListener("click", () => {
+      newBtn.addEventListener("click", () => {
         newBtn.style.display = "none";
         outcomeResult.classList.remove("hidden");
         outcomeText.textContent = batTokens > 0
           ? "You have caught the Riddler. Gotham is safe ... for now"
           : "The Riddler has escaped. Gotham is DOOMED!";
-    });
+      });
+    } else {
+      console.warn("faceOutcomeBtn not found in DOM.");
+    }
 }
 
 // restartGame(): Resets all game values and UI so the player can replay from the start.
