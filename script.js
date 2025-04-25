@@ -317,7 +317,10 @@ function restartGame() {
   riddleInput.style.display = "none";
   submitAnswerBtn.style.display = "none";
 
-  faceOutcomeBtn.style.display = "none";
+  const faceOutcomeBtn = document.getElementById("faceOutcomeBtn");
+  if (faceOutcomeBtn) {
+    faceOutcomeBtn.style.display = "none";
+  }
   outcomeResult.classList.add("hidden");
 }
 
