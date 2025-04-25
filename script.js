@@ -17,7 +17,7 @@ const batTokenDisplay = document.getElementById("batTokenDisplay");
 const endScreen = document.getElementById("endScreen");
 const outcomeResult = document.getElementById("outcomeResult");
 const outcomeText = outcomeResult.querySelector("p.text-white");
-const faceOutcomeBtn = document.getElementById("faceOutcomeBtn");
+// const faceOutcomeBtn = document.getElementById("faceOutcomeBtn");
 
 // === 2. STATE VARIABLES ===
 // These track the current game state: rooms, which room you're on, lives (batTokens), the current riddle, and the countdown timer.
@@ -261,19 +261,28 @@ function showHowToPlay() {
 function endGame(win) {
     console.log("Game ended. Win status:", win, "Remaining BatTokens:", batTokens);
     clearInterval(timerInterval);
-    gameScreen.style.display="none"; 
+    gameScreen.style.display= "none"; 
     endScreen.classList.remove("hidden"); 
 
     riddleSection.classList.add("hidden");
     riddleInput.style.display = "none";
     submitAnswerBtn.style.display = "none";
     
-    faceOutcomeBtn.style.display = "block";
+    // faceOutcomeBtn.style.display = "block";
+    // new update 
+    const faceOutcomeBtn = document.getElementById("faceOutcomeBtn");
+
+    if (faceOutcomeBtn) {
+      faceOutcomeBtn.style.display = "block";
+    }
     outcomeResult.classList.add("hidden");
 
-    if (faceOutcomeBtn && faceOutcomeBtn.parentNode) {
+    // if (faceOutcomeBtn && faceOutcomeBtn.parentNode) {
+      const faceOutcomeBtnParent = faceOutcomeBtn && faceOutcomeBtn.parentNode ? faceOutcomeBtn.parentNode : null;
+      if (faceOutcomeBtn && faceOutcomeBtnParent) {
       const newBtn = faceOutcomeBtn.cloneNode(true);
-      faceOutcomeBtn.parentNode.replaceChild(newBtn, faceOutcomeBtn);
+      // faceOutcomeBtn.parentNode.replaceChild(newBtn, faceOutcomeBtn);
+      faceOutcomeBtnParent.replaceChild(newBtn, faceOutcomeBtn);
 
       newBtn.addEventListener("click", () => {
         newBtn.style.display = "none";
